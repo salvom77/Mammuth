@@ -1,0 +1,17 @@
+# test_filter_simple.mmt
+echo "=== FILTER TEST ==="
+
+int nums[] = 1, 2, 3, 4, 5, 6
+
+echo "Original array:"
+echo str(nums[0])  # 1
+echo str(nums[5])  # 6
+
+int evens[] = nums => x % 2 == 0
+
+echo "Filtered array (evens):"
+echo str(evens[0])  # Dovrebbe essere 2
+echo str(evens[1])  # Dovrebbe essere 4
+echo str(evens[2])  # Dovrebbe essere 6
+
+echo "DONE"

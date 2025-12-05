@@ -1,0 +1,13 @@
+# File di Code::Blocks e di layout
+*.cbp
+*.depend
+*.layout
+
+# Cartelle di output compilate
+bin/
+obj/
+
+# File temporanei
+*.o
+*.exe
+*.sh

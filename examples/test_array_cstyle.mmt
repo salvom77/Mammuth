@@ -1,0 +1,16 @@
+# Test Array C-Style Syntax
+echo "=== TEST ARRAY C-STYLE SYNTAX ==="
+
+# Sintassi C-style: tipo nome[]
+int arr1[] = 1, 2, 3, 4, 5
+
+echo "arr1[0] = " $ str(arr1[0])
+echo "arr1[1] = " $ str(arr1[1])
+echo "arr1[2] = " $ str(arr1[2])
+
+echo "Test for-in:"
+for x in arr1::
+    echo "Elemento: " $ str(x)
+end
+
+echo "Test completato con successo!"

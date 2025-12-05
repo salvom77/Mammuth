@@ -1,0 +1,76 @@
+# TEST: Comments v3.4
+
+#[ 
+   Multi-line comment test
+   Mammuth supports both single and multi-line comments!
+]#
+
+echo TEST COMMENTS
+
+# Single line comment
+int x = 42  # Inline comment
+
+echo str(x)  # Atteso: 42
+
+#[
+  This is a
+  multi-line
+  comment
+]#
+
+# Function with comments
+def add(a: int, b: int) -> int::
+    # Add two numbers
+    a + b  # Return sum
+end
+
+echo str(add(10, 20))  # Atteso: 30
+
+#[ Nested function with comments ]#
+def makeAdder(n: int) -> <(int)>::
+    # Create a closure that adds n
+    def add(x: int) -> int::
+        x + n  # Capture n from outer scope
+    end
+    add  # Return the closure
+end
+
+<(int)> add5 = makeAdder(5)
+echo str(add5(10))  # Atteso: 15
+
+# Array operations
+int[] numbers = [1,2,3,4,5]  # Simple array
+
+#[
+  Multi-line explanation:
+  We're creating an array of numbers
+  to demonstrate comments don't affect execution
+]#
+
+#[ TODO: Fix len() bug with arrays
+echo str(len(numbers))  # Atteso: 5
+]#
+
+# Composition with comments
+def dbl(x: int) -> int::
+    x * 2  # Double the input
+end
+
+def addTen(x: int) -> int::
+    x + 10  # Add ten
+end
+
+#[ Create composed function ]#
+<(int)> pipeline = dbl $ addTen
+
+echo str(pipeline(5))  # Atteso: 20 (5*2 + 10)
+
+#[
+  Final test:
+  Everything should work perfectly
+  even with comments everywhere!
+]#
+
+echo COMPLETATO  # Success!
+
+# End of test file
