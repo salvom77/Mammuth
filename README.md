@@ -531,22 +531,22 @@ Native Binary
 
 ### 🔜 Roadmap
 
-#### **v3.7 - Mask Operators** (2-3 weeks)
+#### ** Mask Operators**
 - Advanced filtering patterns
 - Pattern matching for arrays
 
-#### **v3.8 - Card Structures** (3-4 weeks)
+#### ** - Card Structures**
 - Inline: `card Point: int x, int y`
 - Multiline with function types
 - Field access with `.`
 
-#### **v4.0 - Rust Transpiler** (2-3 months)
+#### ** - Rust Transpiler**
 - Full Rust code generation
 - Type checking
 - Optimization
 - Standard library (Rust-based)
 
-#### **v1.0 - Production Release** (6 months)
+#### **- Production Release**
 - Stable compiler
 - Complete stdlib
 - Package manager
