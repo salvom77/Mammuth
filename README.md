@@ -620,9 +620,6 @@ See [LICENSE](LICENSE) for details.
 Mammuth was created through an innovative **human-AI collaborative process**:
 
 - **Vision & Design:** Created by Salvatore Martinico
-- **Implementation:** Developed with assistance from Claude (Anthropic)
-- **All Decisions:** Made by human creator
-- **Ownership:** 100% human creator
 
 This transparent collaboration enabled rapid iteration on language design while maintaining full human control over all architectural decisions.
 
