@@ -1,13 +1,17 @@
-# File di Code::Blocks e di layout
-*.cbp
-*.depend
-*.layout
+# File di KDevelop
+*.kdev4
 
 # Cartelle di output compilate
 bin/
 obj/
+build-debug/
+build-release/
+
+#Cartella di KDevelop
+.kdev4/
 
 # File temporanei
 *.o
 *.exe
 *.sh
+*.kate-swp
