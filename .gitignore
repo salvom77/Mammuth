@@ -2,7 +2,6 @@
 *.kdev4
 
 # Cartelle di output compilate
-bin/*
 obj/
 build-debug/
 build-release/

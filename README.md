@@ -4,7 +4,17 @@ I am excited to introduce Mammuth, a new open-source programming language (licen
 
 As the sole programmer who initiated this project, I am now reaching out to the community. Join me to help shape Mammuth's architecture and future! Your contributions are vital to bringing this language to its full potential.
 
-**The Compiled Language That Should Have Existed**
+<div align="center">
+
+# 🦣 Mammuth
+
+
+
+## The Compiled Language That Should Have Existed
+
+<img src="assets/mammuth_logo.png" alt="Mammuth Logo" width="200"/>
+
+</div>
 
 ---
 
