@@ -17,6 +17,12 @@
 </div>
 
 ---
+## Our Goal
+
+Our Goal: Rust Transpiler
+The current focus is on building a Rust transpiler to achieve native performance, strict type checking, and a robust architecture.
+
+---
 
 ## 💡 The Problem
 
