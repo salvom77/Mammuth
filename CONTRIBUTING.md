@@ -55,6 +55,7 @@ Have an idea? Open an issue with:
 # Fork and clone the repository
 git clone https://github.com/yourusername/mammuth.git
 cd mammuth
+mkdir bin
 
 # Build the interpreter
 ./compile.sh

@@ -728,6 +728,26 @@ Value Interpreter::eval(const std::shared_ptr<ASTNode>& node) {
         return evalCondChain(node);
     }
 
+    // -------- SimpleCond --------
+    // SimpleCond viene usato dentro CondChain, ma può anche apparire standalone
+    // in alcune situazioni di parsing multi-line
+    if (t == "SimpleCond") {
+        // SimpleCond ha 2 figli:
+        // [0] = condizione
+        // [1] = espressione se vera
+        if (node->children.size() < 2) {
+            runtimeError(node.get(), "SimpleCond richiede 2 figli (condizione, espressione)");
+            return 0;
+        }
+        
+        Value condVal = eval(node->children[0]);
+        if (isTruthy(condVal)) {
+            return eval(node->children[1]);
+        }
+        // Se falso, restituisce 0 (o potrebbe essere un errore)
+        return 0;
+    }
+
     if (t == "Elvis") {
         return evalElvis(node);
     }

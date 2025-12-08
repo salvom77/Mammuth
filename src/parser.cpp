@@ -69,6 +69,8 @@ bool Parser::isExpressionOpen() const {
         case TokenType::ASSIGN:
         case TokenType::LPAREN:
         case TokenType::LBRACKET:
+        case TokenType::DOUBLE_QUESTION:  // Fix: Multi-line CondChain
+        case TokenType::QUESTION:         // Fix: Multi-line SimpleCond
             return true;
         default:
             return false;
@@ -652,6 +654,12 @@ std::shared_ptr<ASTNode> Parser::parseCondChain() {
     auto first = parseSimpleCond();
     if (!first) return nullptr;
 
+    // FIX CRITICO: Skip TUTTI i newline (non condizionale!)
+    // Dopo SimpleCond il token precedente è NUMBER, non in isExpressionOpen()
+    while (check(TokenType::NEWLINE)) {
+        advance();
+    }
+
     if (!check(TokenType::DOUBLE_QUESTION) &&
         !check(TokenType::COLON))
         return first;
@@ -659,23 +667,32 @@ std::shared_ptr<ASTNode> Parser::parseCondChain() {
     auto chain = std::make_shared<ASTNode>();
     chain->type = "CondChain";
     chain->children.push_back(first);
-
+    
     while (match(TokenType::DOUBLE_QUESTION)) {
-        skipContinuationNewlines();
+        // Skip newline dopo ??
+        while (check(TokenType::NEWLINE)) {
+            advance();
+        }
         chain->children.push_back(parseSimpleCond());
+        // Skip newline dopo SimpleCond
+        while (check(TokenType::NEWLINE)) {
+            advance();
+        }
     }
-
+    
     if (match(TokenType::COLON)) {
-        skipContinuationNewlines();
+        // Skip newline dopo :
+        while (check(TokenType::NEWLINE)) {
+            advance();
+        }
         auto fallback = parseCondChain();
         chain->extra["hasFallback"] = "1";
         chain->children.push_back(fallback);
     }
     else {
         chain->extra["hasFallback"] = "0";
-        chain->condIncomplete = true;      // <--- MARCA come incompleta
+        chain->condIncomplete = true;
     }
-
 
     return chain;
 }
@@ -1216,6 +1233,12 @@ std::shared_ptr<ASTNode> Parser::parsePrimary() {
 
     if (tok.type == TokenType::END_OF_FILE)
         return nullptr;
+
+    // Fix: ASSIGN è gestito in parseStatement (dichiarazioni variabili funzione)
+    // Non è un errore, semplicemente non va parsato qui
+    if (tok.type == TokenType::ASSIGN) {
+        return nullptr;
+    }
 
     std::cerr << "Token inatteso in parsePrimary: " << tok.lexeme << "\n";
     advance();

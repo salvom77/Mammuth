@@ -5,6 +5,7 @@
 obj/
 build-debug/
 build-release/
+bin/
 
 #Cartella di KDevelop
 .kdev4/
