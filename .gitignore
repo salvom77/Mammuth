@@ -6,6 +6,8 @@ obj/
 build-debug/
 build-release/
 bin/
+output/
+tests/
 
 #Cartella di KDevelop
 .kdev4/
@@ -15,4 +17,5 @@ bin/
 *.exe
 *.sh
 *.kate-swp
+
 
