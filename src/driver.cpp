@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 
+
 bool Driver::parseArguments(int argc, char* argv[]) {
     if (argc < 2) {
         printHelp();

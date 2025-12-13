@@ -309,34 +309,6 @@ std::shared_ptr<ASTNode> Parser::parseStatement() {
     /* ======================================================
        ARRAY ASSIGN: arr[x] = expr
        ====================================================== */
-    if (check(TokenType::IDENT)) {
-        size_t saved = pos;
-
-        if (pos + 1 < tokens.size() &&
-            tokens[pos + 1].type == TokenType::LBRACKET)
-        {
-            auto target = parsePrimary();
-
-            if (match(TokenType::ASSIGN)) {
-                auto node = std::make_shared<ASTNode>();
-                node->type = "ArrayAssign";
-
-                skipContinuationNewlines();
-                node->children.push_back(target);
-
-                auto val = parseExpression();
-
-                if (val && val->type == "CondChain" && val->condIncomplete) {
-                    std::cerr << "Errore: CondChain senza fallback in assegnazione\n";
-                }
-
-                node->children.push_back(val);
-                return node;
-            }
-
-            pos = saved;
-        }
-    }
 
 
     /* ======================================================
@@ -586,39 +558,45 @@ std::shared_ptr<ASTNode> Parser::parseStatement() {
 
 
 std::shared_ptr<ASTNode> Parser::parseAssignment() {
-    // Se non c'è IDENT, non è un'assegnazione
-    if (!check(TokenType::IDENT))
-        return nullptr;
-
     size_t saved = pos;
-    Token identTok = peek();          // salviamo il token per nome + posizione
-    std::string name = identTok.lexeme;
-    advance();                        // consumiamo l'identificatore
 
-    // Se il token successivo NON è "=", non è un'assegnazione → rollback
+    // Skip se inizia con keyword (dichiarazione, non assignment)
+    if (check(TokenType::KW_INT) || check(TokenType::KW_DOUBLE) ||
+        check(TokenType::KW_STRING) || check(TokenType::KW_FIXED) ||
+        check(TokenType::KW_DYNAMIC)) {
+        return nullptr;
+    }
+
+    auto lhs = parseBaseExpression(99);
+
+    if (!lhs) {
+        pos = saved;
+        return nullptr;
+    }
+
+    // Verifica LHS valido
+    if (lhs->type != "Identifier" && lhs->type != "ArrayAccess") {
+        pos = saved;
+        return nullptr;
+    }
+
+    // Se non c'è =, non è assignment
     if (!match(TokenType::ASSIGN)) {
         pos = saved;
         return nullptr;
     }
 
-    // c'è un "=", quindi è un assignment
+    // È assignment!
     skipContinuationNewlines();
     auto rhs = parseExpression();
     if (!rhs) rhs = makeLiteral("0");
 
-    // Costruiamo il nodo Identifier per il LHS
-    auto lhs = std::make_shared<ASTNode>();
-    lhs->type  = "Identifier";
-    lhs->value = name;
-    lhs->line   = identTok.line;
-    lhs->column = identTok.column;
-
-    // Nodo Assign con due figli: [0] = lhs, [1] = rhs
     auto node = std::make_shared<ASTNode>();
-    node->type   = "Assign";
-    node->value  = name;          // opzionale, ma può tornare utile
-    node->line   = identTok.line;
-    node->column = identTok.column;
+    node->type = "Assign";
+
+    if (lhs->type == "Identifier") {
+        node->value = lhs->value;
+    }
 
     node->children.push_back(lhs);
     node->children.push_back(rhs);
@@ -1234,10 +1212,10 @@ std::shared_ptr<ASTNode> Parser::parsePrimary() {
     if (tok.type == TokenType::END_OF_FILE)
         return nullptr;
 
-    // Fix: ASSIGN è gestito in parseStatement (dichiarazioni variabili funzione)
-    // Non è un errore, semplicemente non va parsato qui
-    if (tok.type == TokenType::ASSIGN) {
-        return nullptr;
+   if (tok.type == TokenType::ASSIGN) {
+        std::cerr << "Errore: '=' inatteso in espressione\n";
+        advance();  // ← AGGIUNGI QUESTO!
+        return makeLiteral("0");
     }
 
     std::cerr << "Token inatteso in parsePrimary: " << tok.lexeme << "\n";

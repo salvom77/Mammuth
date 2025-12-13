@@ -2,7 +2,9 @@
 #include "lexer.h"
 #include "parser.h"
 #include "interpreter.h"
+#include "transpiler_cpp.h"
 #include <iostream>
+#include <fstream>
 
 int main(int argc, char* argv[]) {
     Driver driver;
@@ -42,9 +44,19 @@ int main(int argc, char* argv[]) {
     }
 
     if (driver.opts.compile) {
-        std::cout << "[Stub] Compilazione in C++ usando backend: "
-                  << driver.opts.backend << "\n";
-        std::cout << "Output: " << driver.opts.output_file << "\n";
+        Lexer lexer(source);
+        auto tokens = lexer.tokenize();
+        Parser parser(tokens);
+        auto ast = parser.parseProgram();
+        CPPTranspiler cpptranspiler;
+        std::string cpp_code = cpptranspiler.transpile(ast);
+
+        // Scrivi su file
+        std::ofstream out(driver.opts.output_file);
+        out << cpp_code;
+        out.close();
+
+        std::cout << "C++ generato: " << driver.opts.output_file << "\n";
         return 0;
     }
 
